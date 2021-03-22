@@ -11,12 +11,13 @@ func main() {
 
 	wg.Add(2)
 	go func(ch <-chan int, wg *sync.WaitGroup) {
-		msg, ok := <-ch
-		fmt.Println(msg, ok)
+		if msg, ok := <-ch; ok {
+			fmt.Println(msg, ok)
+		}
 		wg.Done()
 	}(ch, wg)
 	go func(ch chan<- int, wg *sync.WaitGroup) {
-		ch <- 0
+		close(ch)
 		wg.Done()
 	}(ch, wg)
 
