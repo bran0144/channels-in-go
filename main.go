@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"sync"
-	"time"
 )
 
 func main() {
@@ -12,12 +11,12 @@ func main() {
 
 	wg.Add(2)
 	go func(ch <-chan int, wg *sync.WaitGroup) {
-		fmt.Println(<-ch)
+		msg, ok := <-ch
+		fmt.Println(msg, ok)
 		wg.Done()
 	}(ch, wg)
 	go func(ch chan<- int, wg *sync.WaitGroup) {
-		ch <- 42
-		time.Sleep(5 * time.Millisecond)
+		ch <- 0
 		wg.Done()
 	}(ch, wg)
 
